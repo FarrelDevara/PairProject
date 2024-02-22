@@ -13,6 +13,15 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Category.hasMany(models.News)
     }
+
+    static async cariCategory(){
+      try {
+        let dataCategory = await Category.findAll()
+        return dataCategory
+      } catch (error) {
+        throw error
+      }
+    }
   }
   Category.init({
     categoryName: DataTypes.STRING

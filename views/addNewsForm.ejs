@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Add News Form</h1>
-    <form action="/berita/add" method="post">
+    <form action="/berita/add" method="post" enctype="multipart/form-data">
 
         <label for="">Title</label>
         <input type="text" name="title"><br><br>
@@ -16,7 +16,7 @@
         <input type="text" name="content"><br><br>
 
         <label for="">imageUrl</label>
-        <input type="text" name="imageUrl"><br><br>
+        <input type="file" name="avatar"><br><br>
 
         <select name="CategoryId" id="">
             <option value="">Choose..</option>

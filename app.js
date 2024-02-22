@@ -2,6 +2,12 @@ const express = require('express')
 const session = require('express-session')
 const app = express()
 const port = 3000
+
+const multer = require("multer");
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 const Controller = require('./controllers/controller')
 
 app.set("view engine", "ejs")
@@ -58,7 +64,7 @@ app.post(`/comment/add/:id/:userId`, Controller.Commenting)
 
 //ADMIN
 app.get('/berita/add',isAdmin, Controller.addNewsForm)
-app.post('/berita/add',isAdmin, Controller.addNews)
+app.post('/berita/add', isAdmin, upload.single("avatar"), Controller.addNews)
 
 app.get('/berita/delete/:id',isAdmin, Controller.deleteNews)
 

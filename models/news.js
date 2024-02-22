@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   News.init({
     title: DataTypes.STRING,
     content: DataTypes.STRING,
-    imageUrl: DataTypes.STRING,
+    imageUrl: DataTypes.TEXT,
     CategoryId: DataTypes.INTEGER
   }, {
     sequelize,

@@ -84,7 +84,7 @@ class Controller {
             // res.redirect('/')
             // console.log();
         } catch (error) {
-            res.send(error.message)
+            res.send(error)
         }
     }
 
@@ -93,7 +93,7 @@ class Controller {
             req.session.destroy()
             res.redirect('/')
         } catch (error) {
-            res.send(error.message)
+            res.send(error)
         }
     }
 
@@ -104,9 +104,7 @@ class Controller {
 
             // console.log(user.username,"<<<<<<<");
             // res.send(data)
-            if (req.session.role === "admin") {
-                res.render("adminPage", { data })
-            } else {
+            
 
                 // console.log(req.session.userId);
                 let user = await User.findByPk(req.session.userId)
@@ -115,7 +113,7 @@ class Controller {
 
                 let filter = req.query.filter;
 
-                let option = {include: Category}
+                let option = { include: Category }
 
                 if (filter) {
                     option.where = {
@@ -127,8 +125,13 @@ class Controller {
 
                 let data = await News.findAll(option)
 
-                res.render("homePage", { data, user, category })
-            }
+                if (req.session.role === "admin") {
+                    res.render("adminPage", { data })
+                }else{
+
+                    res.render("homePage", { data, user, category })
+                }
+            
         } catch (error) {
             res.send(error.message)
         }
@@ -212,7 +215,9 @@ class Controller {
     //ADMIN
     static async addNewsForm(req, res) {
         try {
-            let dataCategory = await Category.findAll()
+
+            
+            let dataCategory = await Category.cariCategory()
             // console.log(dataCategory);
             res.render("addNewsForm", { dataCategory })
         } catch (error) {
@@ -223,13 +228,17 @@ class Controller {
     static async addNews(req, res) {
         try {
             // console.log(req.body);
+            let buffer = req.file.buffer;
+            let decodeBuffer = Buffer.from(buffer).toString("base64");
+            let imageUrl = `data:${req.file.mimetype};base64,${decodeBuffer}`;
+
             await News.create({
                 title: req.body.title,
                 content: req.body.content,
-                imageUrl: req.body.imageUrl,
+                imageUrl: imageUrl,
                 CategoryId: req.body.CategoryId,
-            })
-            res.redirect('/')
+            });
+            res.redirect("/");
         } catch (error) {
             res.send(error.message)
         }

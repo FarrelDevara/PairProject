@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       imageUrl: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       CategoryId: {
         type: Sequelize.INTEGER,
