@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const helper = require('../helper');
 module.exports = (sequelize, DataTypes) => {
   class Profile extends Model {
     /**
@@ -11,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Profile.belongsTo(models.User)
+    }
+
+    get formatDate(){
+      return helper.formatDate(this.createdAt)
     }
   }
   Profile.init({

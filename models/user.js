@@ -3,7 +3,8 @@ const {
   Model
 } = require('sequelize');
 
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
+const helper = require('../helper');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -14,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasOne(models.Profile)
+      User.hasMany(models.Comment)
     }
+
+    
   }
   User.init({
     username: DataTypes.STRING,

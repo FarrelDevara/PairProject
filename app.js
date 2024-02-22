@@ -45,7 +45,7 @@ const isAdmin = function(req,res,next){
     res.redirect('/')
   }
 }
-
+//USER
 app.get('/register',isNotLogin, Controller.registerForm)
 app.post('/register',isNotLogin, Controller.register)
 app.get('/login', isNotLogin, Controller.loginForm)
@@ -54,8 +54,15 @@ app.post('/login', isNotLogin, Controller.login)
 app.get('/profile', isLogin, Controller.profileUser)
 app.get('/logout', isLogin, Controller.logout)
 
+//ADMIN
 app.get('/berita/add',isAdmin, Controller.addNewsForm)
 app.post('/berita/add',isAdmin, Controller.addNews)
+
+app.get('/berita/delete/:id',isAdmin, Controller.deleteNews)
+
+app.get('/berita/edit/:id',isAdmin, Controller.editNewsForm)
+app.post('/berita/edit/:id',isAdmin, Controller.editNews)
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

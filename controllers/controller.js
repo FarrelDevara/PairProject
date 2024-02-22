@@ -1,4 +1,4 @@
-const { Category, News, User } = require('../models')
+const { Category, News, User, Profile } = require('../models')
 const bcrypt = require('bcryptjs')
 // const session = require('express-session')
 
@@ -108,7 +108,16 @@ class Controller {
         try {
             console.log(req.session.userId);
 
-            res.render("profileUser")
+            // let data = await Profile.findAll()
+
+            let data = await Profile.findOne({
+                where : {
+                    UserId : req.session.userId
+                }
+            })
+            console.log(data);
+
+            res.render("profileUser",{data})
         } catch (error) {
             res.send(error)
         }
@@ -156,6 +165,60 @@ class Controller {
             res.send(error.message)
         }
     }
+
+    static async deleteNews(req, res) {
+        try {
+            // console.log(req.body);
+            console.log(req.params.id);
+            
+            await News.destroy({
+                where:{
+                    id : req.params.id
+                }
+            })
+
+            res.redirect('/')
+        } catch (error) {   
+            res.send(error.message)
+        }
+    }
+    
+    static async editNewsForm(req, res) {
+        try {
+
+            let data = await News.findByPk(req.params.id)
+            let dataCategory = await Category.findAll()
+
+            res.render("editNewsForm",{data,dataCategory})
+
+        } catch (error) {   
+            res.send(error.message)
+        }
+    }
+
+    static async editNews(req, res) {
+        try {
+            console.log(req.body);
+            console.log(req.params.id);
+
+            await News.update({
+                title : req.body.title,
+                content : req.body.content,
+                imageUrl : req.body.imageUrl,
+                CategoryId : req.body.CategoryId,
+            },{
+                where : {
+                    id : req.params.id
+                }
+            })
+
+            res.redirect('/')
+        } catch (error) {   
+            res.send(error.message)
+        }
+    }
+
+    
 
 }
 
