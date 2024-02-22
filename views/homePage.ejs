@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
+</head>
+<body>
+    <h1>TAMBAHIN NAVBAR</h1>
+    <a href="/logout"><button>Logout</button></a>
+    <h1>home page</h1>
+
+    <div class="row">
+        <% data.forEach((item) => { %>
+        <div class="col-md-4">
+          <div class="card">
+            <img src="<%= item.imageUrl %>" class="card-img-top" alt="Image"/>
+            <div class="card-body">
+              <h5 class="card-title"><%= item.title %></h5>
+              <p class="card-text"><%= item.Category.categoryName %></p>
+              <p class="card-text"><%= item.content %></p>
+              <a href="/berita/<%= item.id%>/detail" class="btn btn-primary">Comment</a>
+              <!-- <a style="background-color: red" href="/addNews/<%= data.id %>/delete" class="btn btn-primary">Delete</a> -->
+            </div>
+          </div>
+        </div>
+        <% }) %>
+</body>
+</html>

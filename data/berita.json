@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Prediksi Pertandingan Liga Inggris",
+    "content": "Manchester United akan bertanding melawan Liverpool di Old Trafford malam ini. Pertandingan ini diprediksi akan berlangsung seru dengan kedua tim yang sedang dalam performa terbaiknya.",
+    "imageUrl": "https://media.gettyimages.com/id/1394273939/photo/manchester-england-reece-james-of-chelsea-runs-with-the-ball-from-raphael-varane-of.jpg?s=612x612&w=0&k=20&c=gFP8zjtwZs7Ndf3liNwjkwnowNoiN5rJqrIQBe0lmC4=",
+    "CategoryId": 1
+  },
+  {
+    "title": "Hasil Pertandingan Liga Champions",
+    "content": "Laga El Classico, Barcelona berhasil mengalahkan Real Madrid dengan skor 3-2 dalam pertandingan Liga Champions semalam. Gol dicetak oleh Lewandowski (2 Goal) dan Gavi (1 Goal) dan Goal Real Madrid disumbang oleh Jude Bellingham (2 Goal).",
+    "imageUrl": "https://www.google.co.id/url?sa=i&url=https%3A%2F%2Fwww.nufc.co.uk%2Fteams%2Ffirst-team%2Fkieran-trippier%2F&psig=AOvVaw2YbRybpUazHTpMGw4la4rx&ust=1706274514585000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCIjCvoXO-IMDFQAAAAAdAAAAABAD",
+    "CategoryId": 2
+  },
+  {
+    "title": "Fc Bayern gagal angkut Kieran Trippier ",
+    "content": "Bayern Munich telah menghentikan pengejaran mereka terhadap bek sayap Newcastle Kieran Trippier, direktur olahraga Christoph Freund mengonfirmasi.",
+    "imageUrl": "https://media.gettyimages.com/id/1467991406/photo/barcelona-spain-gavi-of-fc-barcelona-looks-on-during-the-laliga-santander-match-between-fc.jpg?s=612x612&w=0&k=20&c=a6q5JFuaQRRCENExTiUcj6KVVklJEOOmKPM-12TEq3U=",
+    "CategoryId": 3
+  },
+  {
+    "title": "Barcelona Goyah karena Kehilangan Gavi Si Jantung Tim",
+    "content": "Gavi cedera saat melawan Real Madrid di Semi Final UCL.",
+    "imageUrl": "https://media.gettyimages.com/id/1467991406/photo/barcelona-spain-gavi-of-fc-barcelona-looks-on-during-the-laliga-santander-match-between-fc.jpg?s=612x612&w=0&k=20&c=a6q5JFuaQRRCENExTiUcj6KVVklJEOOmKPM-12TEq3U=",
+    "CategoryId": 4
+  }
+]
