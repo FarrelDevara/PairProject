@@ -8,9 +8,11 @@
 </head>
 <body>
     <h1>TAMBAHIN NAVBAR</h1>
+    <a href="/login"><button>Login</button></a>
     <a href="/logout"><button>Logout</button></a>
+    <a href="/profile"><button>Profile</button></a>
     <h1>home page</h1>
-
+    <h4><%= (!user) ? `blm login` : `Halo User ${user.username}`%></h4>
     <div class="row">
         <% data.forEach((item) => { %>
         <div class="col-md-4">
@@ -18,7 +20,7 @@
             <img src="<%= item.imageUrl %>" class="card-img-top" alt="Image"/>
             <div class="card-body">
               <h5 class="card-title"><%= item.title %></h5>
-              <p class="card-text"><%= item.Category.categoryName %></p>
+              <p class="card-text"><%= item.Category?.categoryName %></p>
               <p class="card-text"><%= item.content %></p>
               <a href="/berita/<%= item.id%>/detail" class="btn btn-primary">Comment</a>
               <!-- <a style="background-color: red" href="/addNews/<%= data.id %>/delete" class="btn btn-primary">Delete</a> -->

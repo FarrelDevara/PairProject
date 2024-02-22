@@ -20,7 +20,7 @@ class Controller {
                 password: req.body.password
             })
 
-            res.redirect('/register')
+            res.redirect('/')
             // res.render("registerForm")
         } catch (error) {
 
@@ -47,13 +47,13 @@ class Controller {
                 }
             })
             // console.log(user);
-
             if (user) {
                 const isValidPassword = bcrypt.compareSync(req.body.password, user.password)
 
                 if (isValidPassword) {
                     
                     req.session.userId = user.id
+                    req.session.role = user.role
 
                     res.redirect('/')
                 }else{
@@ -64,10 +64,21 @@ class Controller {
                 const error = "invalid username/error"
                 res.redirect(`/login?error=${error}`)
             }
+
+            // res.redirect('/')
+            // console.log();
         } catch (error) {
             res.send(error.message)
         }
+    }
 
+    static async logout(req,res){
+        try {
+            req.session.destroy()
+            res.redirect('/')
+        } catch (error) {
+            res.send(error.message)
+        }
     }
 
     //SESUDAH ADA SESSION
@@ -77,9 +88,17 @@ class Controller {
             let data = await News.findAll({
                 include: Category
             })
-
+            // console.log(req.session.userId);
+            let user = await User.findByPk(req.session.userId)
+            // console.log(user.username,"<<<<<<<");
             // res.send(data)
-            res.render("homePage", { data })
+
+            if (req.session.role === "admin") {
+                res.render("adminPage", {data})
+            }else{
+                res.render("homePage", { data,user })
+            }
+            
         } catch (error) {
             res.send(error.message)
         }
@@ -97,7 +116,6 @@ class Controller {
 
     static async detailNews(req, res) {
         try {
-            console.log(req.params.id);
 
             let data = await News.findOne({
                 include: Category,
@@ -105,7 +123,6 @@ class Controller {
                     id: req.params.id
                 }
             })
-
             // res.send(data)
             res.render("detailPage", { data })
         } catch (error) {
@@ -113,15 +130,33 @@ class Controller {
         }
     }
 
-    static async logout(req,res){
+    //ADMIN
+    static async addNewsForm(req, res) {
         try {
-            req.session.destroy()
 
-            res.redirect('/login')
-        } catch (error) {
+            let dataCategory = await Category.findAll()
+            // console.log(dataCategory);
+            res.render("addNewsForm",{dataCategory})
+        } catch (error) {   
             res.send(error.message)
         }
     }
+
+    static async addNews(req, res) {
+        try {
+            // console.log(req.body);
+            await News.create({
+                title : req.body.title,
+                content : req.body.content,
+                imageUrl : req.body.imageUrl,
+                CategoryId : req.body.CategoryId,
+            })
+            res.redirect('/')
+        } catch (error) {   
+            res.send(error.message)
+        }
+    }
+
 }
 
 module.exports = Controller

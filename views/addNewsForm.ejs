@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Add News Form</h1>
+    <form action="/berita/add" method="post">
+
+        <label for="">Title</label>
+        <input type="text" name="title"><br><br>
+
+        <label for="">Content</label>
+        <input type="text" name="content"><br><br>
+
+        <label for="">imageUrl</label>
+        <input type="text" name="imageUrl"><br><br>
+
+        <select name="CategoryId" id="">
+            <option value="">Choose..</option>
+            <% dataCategory.forEach((item)=>{ %>
+                <option value="<%= item.id %>"><%= item.categoryName %></option>
+            <% }) %>
+        </select>
+        <input type="submit" value="Add">
+    </form>
+</body>
+</html>

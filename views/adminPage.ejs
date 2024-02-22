@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Admin Page</h1>
+    <a href="/logout"><button>Logout</button></a>
+    <a href="/berita/add"><button>Add News</button></a>
+    <table border="1">
+        <tr>
+            <td></td>
+            <td>Title</td>
+            <td>Category Name</td>
+            <td>content</td>
+            <td>Action</td>
+        </tr>
+        <% data.forEach((item)=> { %>
+            <tr>
+                <td><img src="<%= item.imageUrl %>" class="card-img-top" alt="Image" width="50"/></td>
+                <td>
+                    <%= item.title %>
+                </td>
+                <td>
+                    <%= item.Category?.categoryName %>
+                </td>
+                <td>
+                    <%= item.content %>
+                </td>
+                <td>
+                    <a href=""><button>Edit</button></a>
+                    <a href="/berita/delete/<%= item.id %>"><button>Delete</button></a>
+                </td>
+            </tr>
+            <% }) %>
+    </table>
+</body>
+
+</html>
