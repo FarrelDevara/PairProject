@@ -1,4 +1,4 @@
-const { Category, News, User, Profile } = require('../models')
+const { Category, News, User, Profile, Comment } = require('../models')
 const bcrypt = require('bcryptjs')
 // const session = require('express-session')
 
@@ -106,7 +106,7 @@ class Controller {
 
     static async profileUser(req, res) {
         try {
-            console.log(req.session.userId);
+           let userId = req.session.userId;
 
             // let data = await Profile.findAll()
 
@@ -125,24 +125,63 @@ class Controller {
 
     static async detailNews(req, res) {
         try {
-
+            let userId = req.session.userId;
+            // console.log(userId);
             let data = await News.findOne({
-                include: Category,
+                include: {
+                    model : Comment,
+                    include : {
+                        model : User,
+                        include : Profile
+                    }
+                },
                 where: {
                     id: req.params.id
                 }
             })
             // res.send(data)
-            res.render("detailPage", { data })
+            let errorMessage = req.query.error
+            if (errorMessage) {
+                errorMessage = errorMessage.split(',')
+            } else {
+                errorMessage = []
+            }
+
+            res.render("detailPage", { data, userId, errorMessage })
         } catch (error) {
-            res.send(error.message)
+            res.send(error)
         }
     }
+
+    static async Commenting(req,res){
+        try {
+            // console.log(req.params.id,"<<<id news");
+            // console.log(req.params.userId,"<<<<id user");
+            // console.log(req.body);
+
+            await Comment.create({
+                content : req.body.content,
+                UserId : req.params.userId,
+                NewsId : req.params.id
+            })
+
+            res.redirect(`/berita/${req.params.id}/detail`)
+        } catch (error) {
+            let errors = []
+            if (error.name === "SequelizeValidationError") {
+                errors = error.errors.map((item)=>{
+                    return item.message
+                })
+            }
+            // res.send(errors)
+            res.redirect(`/berita/${req.params.id}/detail?error=${errors}`)
+        }
+    }
+
 
     //ADMIN
     static async addNewsForm(req, res) {
         try {
-
             let dataCategory = await Category.findAll()
             // console.log(dataCategory);
             res.render("addNewsForm",{dataCategory})
@@ -168,8 +207,8 @@ class Controller {
 
     static async deleteNews(req, res) {
         try {
-            // console.log(req.body);
-            console.log(req.params.id);
+        
+            // console.log(req.params.id);
             
             await News.destroy({
                 where:{
@@ -198,8 +237,8 @@ class Controller {
 
     static async editNews(req, res) {
         try {
-            console.log(req.body);
-            console.log(req.params.id);
+            // console.log(req.body);
+            // console.log(req.params.id);
 
             await News.update({
                 title : req.body.title,

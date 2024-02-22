@@ -54,6 +54,8 @@ app.post('/login', isNotLogin, Controller.login)
 app.get('/profile', isLogin, Controller.profileUser)
 app.get('/logout', isLogin, Controller.logout)
 
+app.post(`/comment/add/:id/:userId`, Controller.Commenting)
+
 //ADMIN
 app.get('/berita/add',isAdmin, Controller.addNewsForm)
 app.post('/berita/add',isAdmin, Controller.addNews)

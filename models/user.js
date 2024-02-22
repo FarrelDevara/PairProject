@@ -22,8 +22,27 @@ module.exports = (sequelize, DataTypes) => {
     
   }
   User.init({
-    username: DataTypes.STRING,
-    password: DataTypes.STRING,
+    username: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : "password tidak boleh kosong"
+        }
+      }
+    },
+    password: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : "password tidak boleh kosong"
+        },
+        minimalLength(value){
+          if (value.length < 5) {
+            throw new Error('panjang password minimal 5 huruf');
+          }
+        }
+      }
+    },
     role: DataTypes.STRING
   }, {
     hooks:{

@@ -9,8 +9,27 @@
     <h1>Detail Page</h1>
     <h2><%= data.title %></h2>
     <p><%= data.content %></p>
-    <form action="">
-        <input name="" id=""></input><br>
+    
+    <% errorMessage.forEach((item)=>{ %>
+        <p style="color: red;"><%= item %></p>
+    <% }) %>
+    
+    <table border="1">
+        <tr>
+            <td>Comments</td>
+            <td>Nama | username</td>
+        </tr>
+
+        <% data.Comments.forEach((item)=>{ %>
+        <tr>
+            <td><%= item.content %></td>
+            <td><%= item.User.Profile.fullName %>@<%= item.User.username %></td>
+        </tr>
+        <% }) %>
+        
+    </table>
+    <form action="/comment/add/<%= data.id %>/<%= userId %>" method="post">
+        <input name="content" id=""></input><br>
         <a href=""><button>Comment</button></a>
     </form>
 </body>

@@ -16,7 +16,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Comment.init({
-    content: DataTypes.STRING,
+    content: {
+      type : DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          msg : "comment tidak boleh kosong"
+        }
+      }
+    },
     UserId: DataTypes.INTEGER
   }, {
     sequelize,
