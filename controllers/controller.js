@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { Category, News, User, Profile, Comment } = require('../models')
 const bcrypt = require('bcryptjs')
 // const session = require('express-session')
@@ -6,9 +7,17 @@ class Controller {
 
     static async registerForm(req, res) {
         try {
-            res.render("registerForm")
-        } catch (error) {
 
+            let errorMessage = req.query.error
+            if (errorMessage) {
+                errorMessage = errorMessage.split(',')
+            } else {
+                errorMessage = []
+            }
+
+            res.render("registerForm", { errorMessage })
+        } catch (error) {
+            res.send(error)
         }
     }
 
@@ -24,6 +33,13 @@ class Controller {
             // res.render("registerForm")
         } catch (error) {
 
+            let errors = []
+            if (error.name === "SequelizeValidationError") {
+                errors = error.errors.map((item) => {
+                    return item.message
+                })
+            }
+            res.redirect(`/register?error=${errors}`)
         }
     }
 
@@ -31,7 +47,7 @@ class Controller {
         try {
             // console.log(req.query.error);
             let error = req.query.error
-            res.render("loginPage",{error})
+            res.render("loginPage", { error })
         } catch (error) {
             res.send(error)
         }
@@ -51,16 +67,16 @@ class Controller {
                 const isValidPassword = bcrypt.compareSync(req.body.password, user.password)
 
                 if (isValidPassword) {
-                    
+
                     req.session.userId = user.id
                     req.session.role = user.role
 
                     res.redirect('/')
-                }else{
+                } else {
                     const error = "invalid username/error"
                     res.redirect(`/login?error=${error}`)
                 }
-            }else{
+            } else {
                 const error = "invalid username/error"
                 res.redirect(`/login?error=${error}`)
             }
@@ -72,7 +88,7 @@ class Controller {
         }
     }
 
-    static async logout(req,res){
+    static async logout(req, res) {
         try {
             req.session.destroy()
             res.redirect('/')
@@ -85,20 +101,34 @@ class Controller {
 
     static async homePage(req, res) {
         try {
-            let data = await News.findAll({
-                include: Category
-            })
-            // console.log(req.session.userId);
-            let user = await User.findByPk(req.session.userId)
+
             // console.log(user.username,"<<<<<<<");
             // res.send(data)
-
             if (req.session.role === "admin") {
-                res.render("adminPage", {data})
-            }else{
-                res.render("homePage", { data,user })
+                res.render("adminPage", { data })
+            } else {
+
+                // console.log(req.session.userId);
+                let user = await User.findByPk(req.session.userId)
+                let category = await Category.findAll()
+
+
+                let filter = req.query.filter;
+
+                let option = {include: Category}
+
+                if (filter) {
+                    option.where = {
+                        CategoryId: {
+                            [Op.eq]: filter
+                        }
+                    }
+                }
+
+                let data = await News.findAll(option)
+
+                res.render("homePage", { data, user, category })
             }
-            
         } catch (error) {
             res.send(error.message)
         }
@@ -106,18 +136,18 @@ class Controller {
 
     static async profileUser(req, res) {
         try {
-           let userId = req.session.userId;
+            let userId = req.session.userId;
 
             // let data = await Profile.findAll()
 
             let data = await Profile.findOne({
-                where : {
-                    UserId : req.session.userId
+                where: {
+                    UserId: req.session.userId
                 }
             })
             console.log(data);
 
-            res.render("profileUser",{data})
+            res.render("profileUser", { data })
         } catch (error) {
             res.send(error)
         }
@@ -129,10 +159,10 @@ class Controller {
             // console.log(userId);
             let data = await News.findOne({
                 include: {
-                    model : Comment,
-                    include : {
-                        model : User,
-                        include : Profile
+                    model: Comment,
+                    include: {
+                        model: User,
+                        include: Profile
                     }
                 },
                 where: {
@@ -153,23 +183,23 @@ class Controller {
         }
     }
 
-    static async Commenting(req,res){
+    static async Commenting(req, res) {
         try {
             // console.log(req.params.id,"<<<id news");
             // console.log(req.params.userId,"<<<<id user");
             // console.log(req.body);
 
             await Comment.create({
-                content : req.body.content,
-                UserId : req.params.userId,
-                NewsId : req.params.id
+                content: req.body.content,
+                UserId: req.params.userId,
+                NewsId: req.params.id
             })
 
             res.redirect(`/berita/${req.params.id}/detail`)
         } catch (error) {
             let errors = []
             if (error.name === "SequelizeValidationError") {
-                errors = error.errors.map((item)=>{
+                errors = error.errors.map((item) => {
                     return item.message
                 })
             }
@@ -184,8 +214,8 @@ class Controller {
         try {
             let dataCategory = await Category.findAll()
             // console.log(dataCategory);
-            res.render("addNewsForm",{dataCategory})
-        } catch (error) {   
+            res.render("addNewsForm", { dataCategory })
+        } catch (error) {
             res.send(error.message)
         }
     }
@@ -194,43 +224,43 @@ class Controller {
         try {
             // console.log(req.body);
             await News.create({
-                title : req.body.title,
-                content : req.body.content,
-                imageUrl : req.body.imageUrl,
-                CategoryId : req.body.CategoryId,
+                title: req.body.title,
+                content: req.body.content,
+                imageUrl: req.body.imageUrl,
+                CategoryId: req.body.CategoryId,
             })
             res.redirect('/')
-        } catch (error) {   
+        } catch (error) {
             res.send(error.message)
         }
     }
 
     static async deleteNews(req, res) {
         try {
-        
+
             // console.log(req.params.id);
-            
+
             await News.destroy({
-                where:{
-                    id : req.params.id
+                where: {
+                    id: req.params.id
                 }
             })
 
             res.redirect('/')
-        } catch (error) {   
+        } catch (error) {
             res.send(error.message)
         }
     }
-    
+
     static async editNewsForm(req, res) {
         try {
 
             let data = await News.findByPk(req.params.id)
             let dataCategory = await Category.findAll()
 
-            res.render("editNewsForm",{data,dataCategory})
+            res.render("editNewsForm", { data, dataCategory })
 
-        } catch (error) {   
+        } catch (error) {
             res.send(error.message)
         }
     }
@@ -241,23 +271,21 @@ class Controller {
             // console.log(req.params.id);
 
             await News.update({
-                title : req.body.title,
-                content : req.body.content,
-                imageUrl : req.body.imageUrl,
-                CategoryId : req.body.CategoryId,
-            },{
-                where : {
-                    id : req.params.id
+                title: req.body.title,
+                content: req.body.content,
+                imageUrl: req.body.imageUrl,
+                CategoryId: req.body.CategoryId,
+            }, {
+                where: {
+                    id: req.params.id
                 }
             })
 
             res.redirect('/')
-        } catch (error) {   
+        } catch (error) {
             res.send(error.message)
         }
     }
-
-    
 
 }
 

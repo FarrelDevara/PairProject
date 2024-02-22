@@ -7,7 +7,10 @@
 </head>
 <body>
     <h1>Register Form</h1>
-
+    <% errorMessage.forEach((item)=>{ %>
+        <p style="color: red;"><%= item %></p>
+    <% }) %>
+    
     <form action="/register" method="post">
         <label for="">username</label>
         <input type="text" name="username"><br><br>

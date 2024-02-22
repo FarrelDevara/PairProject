@@ -11,6 +11,19 @@
     <a href="/login"><button>Login</button></a>
     <a href="/logout"><button>Logout</button></a>
     <a href="/profile"><button>Profile</button></a>
+
+
+    <form action="/" method="get">
+      <select name="filter" id="">
+          <option value="">Choose..</option>
+      <% category.forEach((item)=>{ %>
+          <option value="<%= item.id %>"><%= item.categoryName %></option>
+      <% }) %>    
+      </select>
+      <input type="submit">
+      </form>
+
+
     <h1>home page</h1>
     <h4><%= (!user) ? `blm login` : `Halo User ${user.username}`%></h4>
     <div class="row">

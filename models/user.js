@@ -26,16 +26,13 @@ module.exports = (sequelize, DataTypes) => {
       type : DataTypes.STRING,
       validate : {
         notEmpty : {
-          msg : "password tidak boleh kosong"
+          msg : "usesrname tidak boleh kosong"
         }
       }
     },
     password: {
       type : DataTypes.STRING,
       validate : {
-        notEmpty : {
-          msg : "password tidak boleh kosong"
-        },
         minimalLength(value){
           if (value.length < 5) {
             throw new Error('panjang password minimal 5 huruf');
